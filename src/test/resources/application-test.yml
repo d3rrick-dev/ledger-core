@@ -1,0 +1,12 @@
+spring:
+  flyway:
+    enabled: true
+    locations: "classpath:db/migration"
+    clean-on-validation-error: true
+
+logging:
+  level:
+    org.springframework.jdbc.datasource.DriverManagerDataSource: DEBUG
+    org.testcontainers: DEBUG
+    com.zaxxer.hikari: DEBUG
+    com.github.dockerjava: WARN
