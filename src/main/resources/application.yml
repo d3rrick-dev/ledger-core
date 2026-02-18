@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/loan_db
+    url: jdbc:postgresql://localhost:5432/ledger_core
     username: postgres
     password: secret
     driver-class-name: org.postgresql.Driver

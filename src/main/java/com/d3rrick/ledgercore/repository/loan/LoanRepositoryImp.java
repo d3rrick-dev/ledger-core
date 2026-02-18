@@ -1,7 +1,7 @@
 package com.d3rrick.ledgercore.repository.loan;
 
 import com.d3rrick.ledgercore.model.Loan;
-import com.d3rrick.ledgercore.model.LoanStatus;
+import com.d3rrick.ledgercore.domain.model.LoanStatus;
 import com.d3rrick.ledgercore.repository.jooq.tables.records.LoanRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;

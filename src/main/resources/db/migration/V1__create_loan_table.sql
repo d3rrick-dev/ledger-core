@@ -1,7 +1,17 @@
-CREATE TABLE IF NOT EXISTS loan
-(
-    user_id    UUID PRIMARY KEY,
-    amount     NUMERIC(19, 2),
-    status     VARCHAR(50),
-    created_at TIMESTAMP
+CREATE TABLE loan (
+  user_id UUID PRIMARY KEY,
+  principal_amount NUMERIC(19, 2) NOT NULL,
+  current_balance NUMERIC(19, 2) NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  version BIGINT NOT NULL DEFAULT 1,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ledger_entry (
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES loan(user_id),
+  amount_delta NUMERIC(19, 2) NOT NULL,
+  entry_type VARCHAR(50) NOT NULL,
+  idempotency_key UUID UNIQUE NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
