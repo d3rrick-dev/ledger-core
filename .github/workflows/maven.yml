@@ -43,4 +43,4 @@ jobs:
           name: test-reports
           path: |
             target/surefire-reports/
-            target/failsafe-reports/
+#            target/failsafe-reports/
