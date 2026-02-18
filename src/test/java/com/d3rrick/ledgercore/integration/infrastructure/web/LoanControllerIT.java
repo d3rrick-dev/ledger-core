@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,5 +62,56 @@ class LoanControllerIT extends BaseIntegrationTest {
                 .uri("/api/v1/loan/{userId}", UUID.randomUUID())
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    @DisplayName("Concurrency Test: 10 parallel repayments should result in 0 balance")
+    void concurrentRepayments_ShouldMaintainIntegrity() throws InterruptedException {
+        var userId = UUID.randomUUID().toString();
+        var totalAmount = new BigDecimal("100.00");
+        var paymentAmount = new BigDecimal("10.00");
+        int numberOfThreads = 10;
+
+        webClient.post()
+                .uri("/api/v1/loan")
+                .bodyValue(new LoanRequest(userId, totalAmount, UUID.randomUUID().toString()))
+                .exchange()
+                .expectStatus().isCreated();
+
+        var executor = Executors.newFixedThreadPool(numberOfThreads);
+        var latch = new CountDownLatch(1);
+        var doneLatch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executor.submit(() -> {
+                try {
+                    latch.await();
+
+                    webClient.post()
+                            .uri("/api/v1/loan/{userId}/repayment", userId)
+                            .bodyValue(new RepaymentRequest(paymentAmount, UUID.randomUUID()))
+                            .exchange();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    doneLatch.countDown();
+                }
+            });
+        }
+
+        latch.countDown();
+        var _ = doneLatch.await(10, TimeUnit.SECONDS);
+        executor.shutdown();
+
+        webClient.get()
+                .uri("/api/v1/loan/{userId}", userId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(LoanResponse.class)
+                .value(response -> {
+                    assertThat(response.currentBalance())
+                            .as("Balance should be zero after 10 payments of 10.00")
+                            .isEqualByComparingTo(BigDecimal.ZERO);
+                });
     }
 }
