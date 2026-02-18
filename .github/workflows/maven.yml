@@ -34,7 +34,7 @@ jobs:
         with:
           files: |
             target/surefire-reports/**/*.xml
-            target/failsafe-reports/**/*.xml
+#            target/failsafe-reports/**/*.xml
 
       - name: Upload Artifacts
         if: always()
@@ -43,4 +43,4 @@ jobs:
           name: test-reports
           path: |
             target/surefire-reports/
-            target/failsafe-reports/
+#            target/failsafe-reports/

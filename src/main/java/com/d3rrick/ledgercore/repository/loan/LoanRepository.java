@@ -1,7 +1,7 @@
 package com.d3rrick.ledgercore.repository.loan;
 
 import com.d3rrick.ledgercore.model.Loan;
-import com.d3rrick.ledgercore.model.LoanStatus;
+import com.d3rrick.ledgercore.domain.model.LoanStatus;
 
 import java.util.List;
 

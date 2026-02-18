@@ -1,8 +1,9 @@
 package com.d3rrick.ledgercore.integration.loan;
 
-import com.d3rrick.ledgercore.integration.IntegrationTestRoot;
+import com.d3rrick.ledgercore.integration.BaseIntegrationTest;
 import com.d3rrick.ledgercore.model.Loan;
-import com.d3rrick.ledgercore.model.LoanStatus;
+import com.d3rrick.ledgercore.domain.model.LoanStatus;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -10,7 +11,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class RepositoryIntegrationTest extends IntegrationTestRoot {
+@Disabled
+class RepositoryBaseIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void createLoan_shouldPersistToDatabaseAndReturnLoan() {

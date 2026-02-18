@@ -1,0 +1,28 @@
+
+### Create Loan
+POST http://localhost:8090/api/v1/loan
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userId": "1004af92-643f-43d9-bd99-e3f403fc3972",
+  "amount": 500.00,
+  "idempotencyKey": "1014af92-643f-43d9-bd99-e3f403fc3973"
+}
+
+
+### get loan
+GET http://localhost:8090/api/v1/loan/1004af92-643f-43d9-bd99-e3f403fc3972
+Content-Type: application/json
+Accept: application/json
+
+
+### repay
+POST http://localhost:8090/api/v1/loan/1004af92-643f-43d9-bd99-e3f403fc3972/repayment
+Content-Type: application/json
+Accept: application/json
+
+{
+  "amount": 400.00,
+  "idempotencyKey": "4534af92-643f-43d9-bd99-e3f403fc3973"
+}
